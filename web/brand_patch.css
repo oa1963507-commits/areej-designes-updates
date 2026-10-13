@@ -11,3 +11,9 @@
   display:block !important;
 }
 .brand small{display:none !important}
+
+
+/* V18.4 brand text accent */
+.brand-designes{
+  color:#E59915 !important;
+}
