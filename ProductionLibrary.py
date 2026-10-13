@@ -9,6 +9,7 @@ module back in place, then executes it.
 """
 from pathlib import Path
 import os
+import sys
 
 _here = Path(__file__).resolve()
 _app_home = Path(os.environ.get("AREEJ_APP_HOME") or _here.parent.parent)
@@ -36,7 +37,19 @@ for _candidate in _candidates:
         pass
 
 if not _source:
-    raise RuntimeError("Areej updater migration could not find the backed-up runtime.")
+    # Reliable fallback: the launcher EXE always contains the clean V18.2
+    # baseline runtime under sys._MEIPASS/runtime while the app is running.
+    try:
+        _bundle_root = Path(getattr(sys, "_MEIPASS", ""))
+        _bundled = _bundle_root / "runtime" / "ProductionLibrary.py"
+        _text = _bundled.read_text(encoding="utf-8")
+        if len(_text) > 50000 and "class WebApi:" in _text and 'APP_VERSION = "18.2"' in _text:
+            _source = _text
+    except Exception:
+        pass
+
+if not _source:
+    raise RuntimeError("Areej updater migration could not recover the clean runtime.")
 
 _dynamic_version = r'''def _current_runtime_version():
     try:
