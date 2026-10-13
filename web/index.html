@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Areej Designes</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="ambient a1"></div><div class="ambient a2"></div><div class="grid-bg"></div>
+  <div id="app" class="app-shell">
+    <header class="topbar">
+      <div class="brand-side">
+        <button id="menuBtn" class="icon-btn menu-btn">☰</button>
+        <div class="brand"><div class="areej-mark"><img class="brand-logo" src="assets/areej_logo.png" alt="Areej"><span class="brand-name">Areej Designes</span></div><small>PRODUCTION LIBRARY</small></div>
+      </div>
+      <div class="topbar-spacer"></div>
+      <div class="top-actions">
+        <button id="networkChip" class="status-chip"><i></i><span>NETWORK</span></button>
+        <button id="notificationBtn" class="icon-btn bell">♧<b id="notificationBadge" hidden>0</b></button>
+        <button id="userBtn" class="user-chip"><span class="avatar"><img id="userAvatarImg" alt=""><span id="userAvatarFallback">OM</span></span><span><small id="userRoleLabel">مرحباً</small><strong id="usernameLabel">Omar</strong></span><span>⌄</span></button>
+        <button id="undoBtn" class="icon-btn history-btn" title="رجوع خطوة للخلف"><span>←</span><b id="undoCount">0</b></button>
+        <button id="redoBtn" class="icon-btn history-btn" title="تقدم خطوة للأمام"><span>→</span><b id="redoCount">0</b></button>
+        <button id="refreshBtn" class="icon-btn refresh-btn" title="تحديث البرنامج وقراءة الملفات من جديد">↻</button>
+        <button id="settingsBtn" class="icon-btn">⚙</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="design-sidebar glass-card">
+        <div class="sidebar-title"><div><h2>التصميمات</h2><span id="designCount" class="count-pill">0</span></div><button id="newDesignBtn" class="square-plus">＋</button></div>
+        <div class="sidebar-search"><span>⌕</span><input id="sidebarSearch" placeholder="البحث بالسيريال أو الاسم" /></div>
+        <div id="designList" class="design-list"></div>
+      </aside>
+
+      <section class="content">
+        <section class="hero glass-card">
+          <div id="previewCard" class="preview-card clickable"><img id="mainPreview" alt="Preview" /><div id="previewEmpty" class="preview-empty">NO PREVIEW</div><button class="expand">↗</button></div>
+          <div class="design-info">
+            <div class="section-head"><h2>▦ تفاصيل التصميم الحالي</h2><span>Design Information</span></div>
+            <div class="info-grid">
+              <div class="info-card"><span class="mini-icon">▣</span><div><small>السيريال</small><strong id="serialValue">—</strong></div></div>
+              <div class="info-card"><span class="mini-icon">◇</span><div><small>اسم التصميم</small><strong id="nameValue">—</strong></div></div>
+              <div class="info-card"><span class="mini-icon">◉</span><div><small>السعر (ج.م)</small><strong id="priceValue" class="editable-price" title="اضغط لتعديل السعر">—</strong></div></div>
+            </div>
+            <div class="print-row">
+              <div class="qty-card"><span class="stack-icon">◇</span><span>كمية الطباعة</span><button id="minusQty">−</button><input id="quantityInput" type="number" min="1" value="100" /><button id="plusQty">＋</button></div>
+              <div class="quantity-total-card" title="سعر التصميم × كمية الطباعة">
+                <div><small>إجمالي السعر</small><strong id="quantityTotalValue">—</strong></div>
+                <span>ج.م</span>
+              </div>
+              <button id="printBtn" class="primary-print"><span>▣</span> تسجيل طباعة <b>←</b></button>
+            </div>
+            <div class="hero-actions">
+              <button id="previewBtn">✎ تعديل Preview</button>
+              <button id="openAllBtn">▱ فتح ملفات الإنتاج</button>
+              <button id="addDtfBtn">＋ DTF</button>
+              <button id="addPdfBtn">＋ PDF</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="materials glass-card">
+          <div class="section-head material-head"><h2>▦ حساب الخامات المطلوبة</h2><div class="material-head-actions"><span>Material Calculator ›</span><button id="manageMaterialsBtn" class="manage-materials-btn">⚙ إدارة الخامات</button></div></div>
+          <div id="materialGrid" class="material-grid"><div class="empty-state material-empty-state" style="grid-column:1/-1">اختر تصميمًا لعرض حساب الخامات</div></div>
+        </section>
+
+        <section class="files glass-card">
+          <div class="section-head files-head"><h2>▤ ملفات الإنتاج</h2><div><span>Production Files</span><b id="fileCount" class="count-pill">0 ملفات</b></div></div>
+          <div class="table-wrap"><table><thead><tr><th>#</th><th>اسم الملف</th><th>الصيغة</th><th>مقاس اللاير</th><th>الخامة</th><th>تاريخ الإضافة</th><th>الإجراءات</th></tr></thead><tbody id="filesBody"></tbody></table></div>
+        </section>
+      </section>
+    </main>
+
+    <div id="drawer" class="drawer"><div class="drawer-head"><b>التنقل</b><button id="drawerClose">×</button></div><button data-page="library">▣ المكتبة</button><button data-page="activity">☷ سجل التغييرات</button><button data-page="stats">▥ إحصائيات الطباعة</button><button id="favoritesNav">★ المفضلة</button><button id="drawerSettings">⚙ الإعدادات</button></div>
+    <div id="backdrop" class="backdrop"></div>
+
+    <div id="modal" class="modal"><div class="modal-card"><button id="modalClose" class="modal-close">×</button><div id="modalContent"></div></div></div>
+    <div id="previewModal" class="preview-modal"><button id="previewModalClose">×</button><img id="largePreview" /></div>
+    <div id="toastHost" class="toast-host"></div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
