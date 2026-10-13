@@ -1,12 +1,9 @@
 {
-  "version": "18.3",
+  "version": "18.4",
   "channel": "stable",
-  "notes": "تصغير شعار Areej أعلى اليسار وإزالة عبارة PRODUCTION LIBRARY.",
+  "notes": "تغيير كلمة Designes فقط إلى اللون #E59915.",
   "base_url": "https://raw.githubusercontent.com/oa1963507-commits/areej-designes-updates/main",
   "files": [
-    {
-      "path": "ProductionLibrary.py"
-    },
     {
       "path": "web/index.html"
     },
