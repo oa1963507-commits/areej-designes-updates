@@ -1,0 +1,13 @@
+/* Areej V18.3 brand refinement */
+.brand-logo{
+  width:auto !important;
+  height:50px !important;
+  max-width:68px !important;
+  object-fit:contain !important;
+  border:0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  background:transparent !important;
+  display:block !important;
+}
+.brand small{display:none !important}
