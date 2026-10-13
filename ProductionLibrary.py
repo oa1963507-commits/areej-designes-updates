@@ -29,7 +29,7 @@ _source = None
 for _candidate in _candidates:
     try:
         _text = _candidate.read_text(encoding="utf-8")
-        if len(_text) > 50000 and "class ProductionApi" in _text and 'APP_VERSION = "18.2"' in _text:
+        if len(_text) > 50000 and "class WebApi:" in _text and 'APP_VERSION = "18.2"' in _text:
             _source = _text
             break
     except Exception:
