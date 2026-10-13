@@ -1,0 +1,12 @@
+{
+  "version": "18.2",
+  "channel": "stable",
+  "notes": "قناة التحديث المباشر جاهزة ومتصلة بـ GitHub.",
+  "base_url": "https://raw.githubusercontent.com/oa1963507-commits/areej-designes-updates/main",
+  "files": [
+    {
+      "path": "web/index.html",
+      "sha256": "75357eb2ca49835db190b6eed7c96d123e7120e3df593a272aefbd7fc9dc0fd9"
+    }
+  ]
+}
