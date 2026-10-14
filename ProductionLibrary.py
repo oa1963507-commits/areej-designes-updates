@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-"""Areej V18.8 one-time runtime migration.
+"""Areej V18.13 one-time updater migration.
 
-Restores instant design navigation while preserving external size-change
-detection. V18.7 used content hashing during every design selection; that could
-read large production files over the network and slow the UI. V18.8 switches
-normal change detection to nanosecond mtime + ctime + byte-size metadata and
-keeps the important dimension-cache invalidation added in V18.7.
+Installs hot web updates: HTML/CSS/JS changes are applied in-place and the
+WebView reloads itself without restarting the desktop process. Python/runtime
+changes still restart because loaded Python code cannot be safely replaced in
+the running process.
 """
 from pathlib import Path
 import os
@@ -19,8 +18,8 @@ def _is_full_runtime(text):
     return (
         len(text) > 100000
         and "class WebApi:" in text
-        and "def _sync_file_states(" in text
-        and "def _design_files_signature(" in text
+        and "def apply_program_update(self):" in text
+        and "def _safe_runtime_target(" in text
     )
 
 _source = None
@@ -55,65 +54,115 @@ if not _source:
         pass
 
 if not _source:
-    raise RuntimeError("Areej V18.8 could not recover the working runtime.")
+    raise RuntimeError("Areej V18.13 could not recover the working runtime.")
 
-def _replace_method(source, method_header, next_header, replacement):
-    start = source.find(method_header)
-    if start < 0:
-        raise RuntimeError("Missing runtime method: " + method_header.strip())
-    end = source.find(next_header, start)
-    if end < 0:
-        raise RuntimeError("Missing runtime boundary: " + next_header.strip())
-    return source[:start] + replacement.rstrip() + "\n" + source[end:]
-
-_fast_signature = r'''    def _file_signature(self, path: Path):
-        """Fast network-friendly signature for external production-file edits.
-
-        Uses high-resolution filesystem metadata only, so switching designs
-        never reads TIFF/PDF contents across the network. Size edits saved by
-        Photoshop/Illustrator/Acrobat update Windows write/change metadata and
-        are therefore detected without the V18.7 navigation penalty.
-        """
+_new_method = r'''    def apply_program_update(self):
+        global APP_VERSION
         try:
-            st = path.stat()
-            mtime_ns = int(getattr(st, 'st_mtime_ns', int(st.st_mtime * 1_000_000_000)))
-            ctime_ns = int(getattr(st, 'st_ctime_ns', int(st.st_ctime * 1_000_000_000)))
-            size = int(st.st_size)
-            return f'{mtime_ns}:{ctime_ns}:{size}'
-        except Exception:
-            return '0:0:-1'
+            self._require_auth()
+            manifest = self._read_remote_manifest()
+            remote = str(manifest.get('version') or '')
+            if _version_tuple(remote) <= _version_tuple(APP_VERSION):
+                return self._ok(updated=False, version=APP_VERSION, message='البرنامج على آخر إصدار.')
+
+            runtime = Path(os.environ.get('AREEJ_RUNTIME_DIR') or Path(__file__).resolve().parent).resolve()
+            app_home = Path(os.environ.get('AREEJ_APP_HOME') or runtime.parent)
+            stage = app_home / 'update_staging' / core.sanitize_component(remote)
+            backup = app_home / 'update_backups' / f"{core.sanitize_component(APP_VERSION)}_{int(time.time())}"
+            if stage.exists():
+                shutil.rmtree(stage, ignore_errors=True)
+            stage.mkdir(parents=True, exist_ok=True)
+            backup.mkdir(parents=True, exist_ok=True)
+
+            prepared = []
+            for item in manifest.get('files') or []:
+                if not isinstance(item, dict):
+                    continue
+                rel, target = self._safe_runtime_target(item.get('path'))
+                source = self._resolve_update_file_source(manifest, item)
+                blob = self._read_update_bytes(source, timeout=30)
+                expected = str(item.get('sha256') or '').strip().lower()
+                actual = hashlib.sha256(blob).hexdigest().lower()
+                if expected and actual != expected:
+                    raise ValueError(f'فشل التحقق من ملف التحديث: {rel}')
+                staged = stage / Path(rel)
+                staged.parent.mkdir(parents=True, exist_ok=True)
+                staged.write_bytes(blob)
+                if rel.lower().endswith('.py'):
+                    try:
+                        compile(blob.decode('utf-8-sig'), rel, 'exec')
+                    except Exception as syntax_exc:
+                        raise ValueError(f'ملف تحديث Python غير صالح: {rel} | {syntax_exc}')
+                prepared.append((rel, target, staged))
+
+            if not prepared:
+                raise ValueError('لم يتم تجهيز أي ملفات للتحديث.')
+
+            # Web-only updates can be swapped safely while the app is running.
+            # Runtime/Python files still require a process restart.
+            requires_restart = any(not rel.replace('\\','/').startswith('web/') for rel, _, _ in prepared)
+
+            for rel, target, staged in prepared:
+                if target.exists():
+                    b = backup / Path(rel)
+                    b.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(target, b)
+                target.parent.mkdir(parents=True, exist_ok=True)
+                temp_target = target.with_name(target.name + '.updating')
+                shutil.copy2(staged, temp_target)
+                os.replace(temp_target, target)
+
+            marker = runtime / 'runtime_manifest.json'
+            marker.write_text(json.dumps({
+                'version': remote,
+                'channel': str(manifest.get('channel') or 'stable'),
+                'notes': str(manifest.get('notes') or ''),
+                'updated_at': core.now_text(),
+            }, ensure_ascii=False, indent=2), encoding='utf-8')
+
+            # Keep version checks correct without forcing a process restart.
+            APP_VERSION = remote
+
+            if not requires_restart:
+                return self._ok(
+                    updated=True,
+                    version=remote,
+                    restarting=False,
+                    hot_reload=True,
+                    changed_files=[rel for rel, _, _ in prepared],
+                )
+
+            def restart_later():
+                time.sleep(1.0)
+                try:
+                    command = json.loads(os.environ.get('AREEJ_RESTART_COMMAND') or '[]')
+                    if isinstance(command, list) and command:
+                        subprocess.Popen(command, cwd=str(Path(command[-1]).resolve().parent if len(command)>1 else Path(command[0]).resolve().parent))
+                finally:
+                    os._exit(0)
+
+            threading.Thread(target=restart_later, name='AreejUpdaterRestart', daemon=True).start()
+            return self._ok(
+                updated=True,
+                version=remote,
+                restarting=True,
+                hot_reload=False,
+                changed_files=[rel for rel, _, _ in prepared],
+            )
+        except Exception as exc:
+            return self._err(exc)
+
 '''
 
+start=_source.find("    def apply_program_update(self):")
+end=_source.find("    # ---------- main state ----------", start)
+if start<0 or end<0:
+    raise RuntimeError("Areej V18.13 updater method boundary not found.")
+_source=_source[:start]+_new_method+_source[end:]
+
 try:
-    _source = _replace_method(
-        _source,
-        "    def _file_signature(self, path: Path):",
-        "\n    def _versions_root",
-        _fast_signature,
-    )
-
-    # Preserve the V18.7 fix that invalidates cached dimensions whenever the
-    # physical file signature changes. Add it for older recovered runtimes too.
-    _needle = """            sig = self._file_signature(path)
-            old_sig = str(state.get('last_signature') or '')
-            if sig == old_sig:
-                continue
-            try:
-                detail = self._file_detail(path)
-"""
-    _replacement = """            sig = self._file_signature(path)
-            old_sig = str(state.get('last_signature') or '')
-            if sig == old_sig:
-                continue
-            self.calc._production_dimension_cache = {}
-            try:
-                detail = self._file_detail(path)
-"""
-    if _needle in _source:
-        _source = _source.replace(_needle, _replacement, 1)
-
     compile(_source, str(_here), "exec")
-    _tmp = _here.with_suffix(".py.v188.tmp")
+    _tmp = _here.with_suffix(".py.v1813.tmp")
     _tmp.write_text(_source, encoding="utf-8")
     os.replace(str(_tmp), str(_here))
 except Exception:
