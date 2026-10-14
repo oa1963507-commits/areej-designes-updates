@@ -1,17 +1,17 @@
 {
-  "version": "18.14",
+  "version": "18.15",
   "channel": "stable",
-  "notes": "معرض العملاء: الكارت بالكامل أصبح التصميم فقط، ولا تظهر السيريال والاسم والسعر إلا أثناء وجود مؤشر الماوس فوق التصميم. تم أيضًا كسر كاش ملفات المعرض لضمان ظهور الشكل الجديد فورًا.",
+  "notes": "إصلاح نهائي لنظام التحديث: تحديثات الواجهة web فقط لن تعيد تشغيل البرنامج بعد الآن. هذا الإصدار نفسه يتضمن تعديلًا في محرك التحديث ولذلك سيحتاج Restart أخير مرة واحدة.",
   "base_url": "https://raw.githubusercontent.com/oa1963507-commits/areej-designes-updates/main",
   "files": [
+    {
+      "path": "ProductionLibrary.py"
+    },
     {
       "path": "web/index.html"
     },
     {
-      "path": "web/customer_gallery.css"
-    },
-    {
-      "path": "web/customer_gallery.js"
+      "path": "web/hot_update_patch.js"
     }
   ]
 }
