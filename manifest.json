@@ -1,9 +1,12 @@
 {
-  "version": "18.17",
+  "version": "18.18",
   "channel": "stable",
-  "notes": "إضافة موشن خفيف للوجو واسم Areej Designes أعلى الشمال: دخول ناعم، حركة بسيطة للوجو، ولمعة خفيفة على Designes بدون تأثير ملحوظ على الأداء.",
+  "notes": "إصلاح عدم ظهور التحديثات فورًا عبر تجاوز كاش GitHub Raw/CDN. يتضمن أيضًا موشن اللوجو والاسم من V18.17. هذا الإصدار يحتاج Restart مرة واحدة لأنه يصلح محرك التحديث نفسه.",
   "base_url": "https://raw.githubusercontent.com/oa1963507-commits/areej-designes-updates/main",
   "files": [
+    {
+      "path": "ProductionLibrary.py"
+    },
     {
       "path": "web/index.html"
     },
