@@ -13,6 +13,13 @@
     return String(v??'').trim().toLocaleLowerCase('ar');
   }
 
+  function formatCustomerPrice(value){
+    const n=Number(value||0);
+    return Number.isFinite(n)
+      ? n.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:2})
+      : '0';
+  }
+
   function syncList(list){
     allDesigns=Array.isArray(list)?list.slice():[];
     if(document.body.classList.contains('customer-mode')){
@@ -56,11 +63,16 @@
       <div class="customer-design-image">
         ${image}
         <b class="customer-selected-badge">مختار للتنفيذ</b>
+        <div class="customer-price-badge" title="سعر التصميم">
+          <span>السعر</span>
+          <strong>${formatCustomerPrice(d.price)}</strong>
+          <em>ج.م</em>
+        </div>
       </div>
       <div class="customer-design-meta">
-        <small>${esc(d.serial||'—')}</small>
-        <strong title="${esc(d.name||'بدون اسم')}">${esc(d.name||'بدون اسم')}</strong>
-        <span>اضغط لاختيار التصميم</span>
+        <div class="customer-design-serial"><span>السيريال</span><b>${esc(d.serial||'—')}</b></div>
+        <strong class="customer-design-name" title="${esc(d.name||'بدون اسم')}">${esc(d.name||'بدون اسم')}</strong>
+        <span>اضغط لاختيار التصميم للتنفيذ</span>
       </div>
     `;
 
