@@ -1,11 +1,29 @@
 {
-  "version": "18.19",
+  "version": "18.20",
   "channel": "stable",
-  "notes": "تطوير انترو البداية بحركات خفيفة واحترافية: دخول اللوجو بـ Fade وScale، ظهور الاسم بحركة ناعمة، لمعة ذهبية على Designes، وإضاءة خلفية متحركة خفيفة مع الحفاظ على مدة 5 ثوانٍ.",
+  "notes": "إصلاح جذري لقراءة التحديثات: فحص manifest عبر GitHub API مباشرة مع تجاوز الكاش، مع الاحتفاظ بالتحديث الفوري لتعديلات الواجهة. يتضمن آخر تعديلات المعرض والانترو والموشن.",
   "base_url": "https://raw.githubusercontent.com/oa1963507-commits/areej-designes-updates/main",
   "files": [
     {
+      "path": "ProductionLibrary.py"
+    },
+    {
       "path": "web/index.html"
+    },
+    {
+      "path": "web/brand_patch.css"
+    },
+    {
+      "path": "web/performance_patch.js"
+    },
+    {
+      "path": "web/customer_gallery.css"
+    },
+    {
+      "path": "web/customer_gallery.js"
+    },
+    {
+      "path": "web/hot_update_patch.js"
     },
     {
       "path": "web/startup_intro.css"
