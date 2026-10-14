@@ -407,3 +407,62 @@ body.customer-mode #menuBtn{display:none!important}
   .customer-design-card:focus .customer-hover-overlay{opacity:1}
   .customer-design-card:focus .customer-hover-info{transform:translateY(0);opacity:1}
 }
+
+
+/* V18.14 - card is 100% design; details exist only as hover overlay */
+.customer-design-card{
+  position:relative !important;
+  display:block !important;
+  padding:0 !important;
+  margin:0 !important;
+  overflow:hidden !important;
+  background:#071b13 !important;
+}
+.customer-design-card > .customer-design-image{
+  position:relative !important;
+  display:block !important;
+  width:100% !important;
+  aspect-ratio:1 / 1 !important;
+  min-height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  overflow:hidden !important;
+}
+.customer-design-card > .customer-design-image > img{
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  max-height:none !important;
+  margin:0 !important;
+  padding:0 !important;
+  object-fit:contain !important;
+  object-position:center !important;
+}
+.customer-design-card .customer-design-meta,
+.customer-design-card .customer-price-badge{
+  display:none !important;
+  height:0 !important;
+  min-height:0 !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  overflow:hidden !important;
+}
+.customer-design-card .customer-hover-overlay{
+  position:absolute !important;
+  inset:0 !important;
+  display:flex !important;
+  align-items:flex-end !important;
+  box-sizing:border-box !important;
+  opacity:0 !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
+}
+.customer-design-card:hover .customer-hover-overlay,
+.customer-design-card:focus-visible .customer-hover-overlay{
+  opacity:1 !important;
+  visibility:visible !important;
+}
+.customer-design-card .customer-hover-info{
+  width:100% !important;
+}
