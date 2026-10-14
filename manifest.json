@@ -1,20 +1,23 @@
 {
-  "version": "18.8",
+  "version": "18.9",
   "channel": "stable",
-  "notes": "إرجاع سرعة التنقل بين التصميمات مع الحفاظ على اكتشاف تعديلات المقاس ومسح كاش الأبعاد عند تغيير الملف.",
+  "notes": "إضافة معرض عملاء سريع يعرض كل التصميمات بصور كبيرة وبحث فوري. الضغط على أي تصميم يختاره مباشرة للتنفيذ ويرجع لتفاصيله داخل البرنامج.",
   "base_url": "https://raw.githubusercontent.com/oa1963507-commits/areej-designes-updates/main",
   "files": [
     {
-      "path": "ProductionLibrary.py"
+      "path": "web/index.html"
     },
     {
-      "path": "web/index.html"
+      "path": "web/brand_patch.css"
     },
     {
       "path": "web/performance_patch.js"
     },
     {
-      "path": "web/brand_patch.css"
+      "path": "web/customer_gallery.css"
+    },
+    {
+      "path": "web/customer_gallery.js"
     }
   ]
 }
