@@ -1,9 +1,12 @@
 {
-  "version": "18.12",
+  "version": "18.13",
   "channel": "stable",
-  "notes": "تحسين معرض العملاء: التصميم يظهر كامل بدون تفاصيل، وعند وضع مؤشر الماوس تظهر السيريال والاسم والسعر في Overlay أنيق مع إبراز السعر باللون الذهبي.",
+  "notes": "تفعيل التحديث الفوري: تعديلات الواجهة تظهر مباشرة بعد التحديث بدون إعادة تشغيل البرنامج. تحديثات ملفات التشغيل الأساسية فقط تحتاج إعادة تشغيل.",
   "base_url": "https://raw.githubusercontent.com/oa1963507-commits/areej-designes-updates/main",
   "files": [
+    {
+      "path": "ProductionLibrary.py"
+    },
     {
       "path": "web/index.html"
     },
@@ -18,6 +21,9 @@
     },
     {
       "path": "web/customer_gallery.js"
+    },
+    {
+      "path": "web/hot_update_patch.js"
     }
   ]
 }
