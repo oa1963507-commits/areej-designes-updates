@@ -202,3 +202,69 @@ body.customer-mode #menuBtn{display:none!important}
   .customer-design-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
   .customer-gallery-search b{display:none}
 }
+
+
+/* V18.11 - premium customer price presentation */
+.customer-price-badge{
+  position:absolute;
+  left:10px;
+  bottom:10px;
+  z-index:3;
+  display:flex;
+  align-items:baseline;
+  gap:5px;
+  min-width:108px;
+  padding:8px 11px 7px;
+  border:1px solid rgba(229,153,21,.72);
+  border-radius:12px;
+  background:linear-gradient(135deg,rgba(26,18,4,.94),rgba(77,50,4,.94));
+  box-shadow:0 8px 20px rgba(0,0,0,.34),0 0 0 1px rgba(229,153,21,.08) inset;
+  direction:rtl;
+  backdrop-filter:blur(8px);
+}
+.customer-price-badge span{
+  color:#f5ca70;
+  font-size:9px;
+  font-weight:800;
+}
+.customer-price-badge strong{
+  color:#ffd36c;
+  font-size:20px;
+  line-height:1;
+  font-weight:950;
+  letter-spacing:.2px;
+  text-shadow:0 1px 8px rgba(229,153,21,.22);
+}
+.customer-price-badge em{
+  color:#e59915;
+  font-size:10px;
+  font-style:normal;
+  font-weight:900;
+}
+.customer-design-serial{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:5px;
+}
+.customer-design-serial span{
+  margin:0;
+  color:#6d8c79;
+  font-size:9px;
+}
+.customer-design-serial b{
+  color:#63d990;
+  direction:ltr;
+  font-size:11px;
+  font-weight:850;
+}
+.customer-design-name{
+  display:block;
+  overflow:hidden;
+  color:#f0fff5;
+  font-size:15px;
+  font-weight:850;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
