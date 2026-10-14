@@ -1,11 +1,20 @@
 {
-  "version": "18.7",
+  "version": "18.8",
   "channel": "stable",
-  "notes": "تحسين مراقبة ملفات الإنتاج: أي تعديل حقيقي في مقاس TIFF أو PDF يتم اكتشافه حتى لو ظل حجم الملف أو التوقيت كما هو على الشبكة.",
+  "notes": "إرجاع سرعة التنقل بين التصميمات مع الحفاظ على اكتشاف تعديلات المقاس ومسح كاش الأبعاد عند تغيير الملف.",
   "base_url": "https://raw.githubusercontent.com/oa1963507-commits/areej-designes-updates/main",
   "files": [
     {
       "path": "ProductionLibrary.py"
+    },
+    {
+      "path": "web/index.html"
+    },
+    {
+      "path": "web/performance_patch.js"
+    },
+    {
+      "path": "web/brand_patch.css"
     }
   ]
 }
