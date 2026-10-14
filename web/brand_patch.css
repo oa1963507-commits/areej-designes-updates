@@ -17,3 +17,53 @@
 .brand-designes{
   color:#E59915 !important;
 }
+
+
+/* V18.17 - lightweight brand motion */
+.areej-mark{
+  animation:areejBrandEnter 650ms cubic-bezier(.2,.8,.2,1) both;
+  transform-origin:left center;
+}
+
+.brand-logo{
+  animation:areejLogoFloat 3.8s ease-in-out infinite;
+  will-change:transform;
+}
+
+.brand-name{
+  display:inline-block;
+  animation:areejNameDrift 3.8s ease-in-out infinite;
+  will-change:transform,opacity;
+}
+
+.brand-designes{
+  text-shadow:0 0 0 rgba(229,153,21,0);
+  animation:areejGoldPulse 3.8s ease-in-out infinite;
+}
+
+@keyframes areejBrandEnter{
+  0%{opacity:0;transform:translateX(-14px) scale(.96)}
+  100%{opacity:1;transform:translateX(0) scale(1)}
+}
+
+@keyframes areejLogoFloat{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  50%{transform:translateY(-2px) rotate(-1.2deg)}
+}
+
+@keyframes areejNameDrift{
+  0%,100%{transform:translateX(0);opacity:.96}
+  50%{transform:translateX(2px);opacity:1}
+}
+
+@keyframes areejGoldPulse{
+  0%,100%{text-shadow:0 0 0 rgba(229,153,21,0)}
+  50%{text-shadow:0 0 10px rgba(229,153,21,.28)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .areej-mark,.brand-logo,.brand-name,.brand-designes{
+    animation:none !important;
+    transition:none !important;
+  }
+}
