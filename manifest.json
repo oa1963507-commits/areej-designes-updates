@@ -1,17 +1,17 @@
 {
-  "version": "18.18",
+  "version": "18.19",
   "channel": "stable",
-  "notes": "إصلاح عدم ظهور التحديثات فورًا عبر تجاوز كاش GitHub Raw/CDN. يتضمن أيضًا موشن اللوجو والاسم من V18.17. هذا الإصدار يحتاج Restart مرة واحدة لأنه يصلح محرك التحديث نفسه.",
+  "notes": "تطوير انترو البداية بحركات خفيفة واحترافية: دخول اللوجو بـ Fade وScale، ظهور الاسم بحركة ناعمة، لمعة ذهبية على Designes، وإضاءة خلفية متحركة خفيفة مع الحفاظ على مدة 5 ثوانٍ.",
   "base_url": "https://raw.githubusercontent.com/oa1963507-commits/areej-designes-updates/main",
   "files": [
-    {
-      "path": "ProductionLibrary.py"
-    },
     {
       "path": "web/index.html"
     },
     {
-      "path": "web/brand_patch.css"
+      "path": "web/startup_intro.css"
+    },
+    {
+      "path": "web/startup_intro.js"
     }
   ]
 }
