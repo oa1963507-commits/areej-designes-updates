@@ -1,7 +1,7 @@
 {
-  "version": "18.21",
+  "version": "18.22",
   "channel": "stable",
-  "notes": "إلغاء زر التقدم خطوة للأمام من الواجهة مع الإبقاء على زر الرجوع فقط.",
+  "notes": "إصلاح قناة التحديث: ملف bootstrap أصبح قناة ثابتة متزامنة مع manifest الرئيسي، لذلك الأجهزة التي كانت متوقفة عند V18.20 ستقرأ كل الإصدارات الجديدة تلقائيًا. يتضمن أيضًا إلغاء زر التقدم للأمام.",
   "base_url": "https://raw.githubusercontent.com/oa1963507-commits/areej-designes-updates/main",
   "files": [
     {
