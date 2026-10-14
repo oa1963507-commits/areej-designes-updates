@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-"""One-time Areej updater migration.
+"""Areej V18.7 one-time runtime migration.
 
-The V18.2 launcher moved the runtime outside the EXE, while the runtime kept a
-hard-coded APP_VERSION. During this update the original full module is already
-backed up by Areej's updater. This migration restores that full source, replaces
-the hard-coded version with the runtime manifest version, writes the repaired
-module back in place, then executes it.
+Makes external TIFF/PDF size edits detectable even when a network share or
+editor preserves byte size / timestamps. The updater backs up the currently
+working full runtime before installing this file. We patch that full source,
+write it back in place, then execute it.
 """
 from pathlib import Path
 import os
@@ -15,6 +14,15 @@ _here = Path(__file__).resolve()
 _app_home = Path(os.environ.get("AREEJ_APP_HOME") or _here.parent.parent)
 _backup_root = _app_home / "update_backups"
 
+def _is_full_runtime(text):
+    return (
+        len(text) > 100000
+        and "class WebApi:" in text
+        and "def _sync_file_states(" in text
+        and "def _design_files_signature(" in text
+    )
+
+_source = None
 _candidates = []
 if _backup_root.exists():
     try:
@@ -26,46 +34,133 @@ if _backup_root.exists():
     except Exception:
         _candidates = []
 
-_source = None
 for _candidate in _candidates:
     try:
         _text = _candidate.read_text(encoding="utf-8")
-        if len(_text) > 50000 and "class WebApi:" in _text and 'APP_VERSION = "18.2"' in _text:
+        if _is_full_runtime(_text):
             _source = _text
             break
     except Exception:
         pass
 
 if not _source:
-    # Reliable fallback: the launcher EXE always contains the clean V18.2
-    # baseline runtime under sys._MEIPASS/runtime while the app is running.
     try:
         _bundle_root = Path(getattr(sys, "_MEIPASS", ""))
         _bundled = _bundle_root / "runtime" / "ProductionLibrary.py"
         _text = _bundled.read_text(encoding="utf-8")
-        if len(_text) > 50000 and "class WebApi:" in _text and 'APP_VERSION = "18.2"' in _text:
+        if _is_full_runtime(_text):
             _source = _text
     except Exception:
         pass
 
 if not _source:
-    raise RuntimeError("Areej updater migration could not recover the clean runtime.")
+    raise RuntimeError("Areej V18.7 could not recover the working runtime.")
 
-_dynamic_version = r'''def _current_runtime_version():
-    try:
-        _runtime_dir = Path(os.environ.get("AREEJ_RUNTIME_DIR") or Path(__file__).resolve().parent)
-        _marker_path = _runtime_dir / "runtime_manifest.json"
-        _marker = json.loads(_marker_path.read_text(encoding="utf-8"))
-        return str(_marker.get("version") or "18.2")
-    except Exception:
-        return "18.2"
+def _replace_method(source, method_header, next_header, replacement):
+    start = source.find(method_header)
+    if start < 0:
+        raise RuntimeError("Missing runtime method: " + method_header.strip())
+    end = source.find(next_header, start)
+    if end < 0:
+        raise RuntimeError("Missing runtime boundary: " + next_header.strip())
+    return source[:start] + replacement.rstrip() + "\n" + source[end:]
 
-APP_VERSION = _current_runtime_version()'''
+_file_signature = r'''    def _file_signature(self, path: Path):
+        """Robust on-disk fingerprint for external production-file edits.
 
-_source = _source.replace('APP_VERSION = "18.2"', _dynamic_version, 1)
+        Network shares and some editors can preserve file byte size and can
+        briefly expose the same timestamp while changing TIFF/PDF dimensions.
+        Include ctime plus a small content fingerprint from the beginning/end
+        of the file so real size edits are noticed reliably.
+        """
+        try:
+            st = path.stat()
+            mtime_ns = int(getattr(st, 'st_mtime_ns', int(st.st_mtime * 1_000_000_000)))
+            ctime_ns = int(getattr(st, 'st_ctime_ns', int(st.st_ctime * 1_000_000_000)))
+            size = int(st.st_size)
+            digest = ''
+            try:
+                hashlib = __import__('hashlib')
+                h = hashlib.blake2s(digest_size=8)
+                with path.open('rb') as fh:
+                    h.update(fh.read(131072))
+                    if size > 131072:
+                        fh.seek(max(0, size - 131072))
+                        h.update(fh.read(131072))
+                digest = h.hexdigest()
+            except Exception:
+                digest = ''
+            return f'{mtime_ns}:{ctime_ns}:{size}:{digest}'
+        except Exception:
+            return '0:0:-1:'
+'''
 
-_tmp = _here.with_name(_here.name + ".migrating")
-_tmp.write_text(_source, encoding="utf-8")
-os.replace(_tmp, _here)
+_design_signature = r'''    def _design_files_signature(self, design_id):
+        """Return a robust signature for the selected production files.
+
+        This follows physical file content as well as filesystem metadata, so
+        external Photoshop/Illustrator/Acrobat saves are detected on network
+        shares even when the byte count stays unchanged.
+        """
+        if not design_id or not self.db:
+            return ''
+        parts = []
+        try:
+            rows = self.db.files_for(int(design_id))
+        except Exception:
+            return ''
+        for row in rows:
+            path = self._abs(row['rel_path'])
+            parts.append('|'.join([
+                str(row.get('id', '')),
+                str(row.get('material', '')),
+                str(row.get('rel_path', '')),
+                self._file_signature(path),
+            ]))
+        return '||'.join(parts)
+'''
+
+try:
+    _source = _replace_method(
+        _source,
+        "    def _file_signature(self, path: Path):",
+        "\n    def _versions_root",
+        _file_signature,
+    )
+    _source = _replace_method(
+        _source,
+        "    def _design_files_signature(self, design_id):",
+        "\n    def refresh_library_state",
+        _design_signature,
+    )
+
+    _needle = """            sig = self._file_signature(path)
+            old_sig = str(state.get('last_signature') or '')
+            if sig == old_sig:
+                continue
+            try:
+                detail = self._file_detail(path)
+"""
+    _replacement = """            sig = self._file_signature(path)
+            old_sig = str(state.get('last_signature') or '')
+            if sig == old_sig:
+                continue
+            # A content fingerprint can change even when mtime/size did not.
+            # Never reuse cached dimensions after a detected physical edit.
+            self.calc._production_dimension_cache = {}
+            try:
+                detail = self._file_detail(path)
+"""
+    if _needle in _source:
+        _source = _source.replace(_needle, _replacement, 1)
+    elif "Never reuse cached dimensions after a detected physical edit." not in _source:
+        raise RuntimeError("Areej V18.7 could not patch file-size synchronization.")
+
+    compile(_source, str(_here), "exec")
+    _tmp = _here.with_suffix(".py.v187.tmp")
+    _tmp.write_text(_source, encoding="utf-8")
+    os.replace(str(_tmp), str(_here))
+except Exception:
+    raise
 
 exec(compile(_source, str(_here), "exec"), globals(), globals())
