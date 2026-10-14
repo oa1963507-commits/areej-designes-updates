@@ -67,3 +67,9 @@
     transition:none !important;
   }
 }
+
+
+/* V18.21 - hide redo button */
+#redoBtn{
+  display:none !important;
+}
