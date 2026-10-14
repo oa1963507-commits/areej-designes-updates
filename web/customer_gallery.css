@@ -1,0 +1,204 @@
+/* Areej V18.9 - fast customer-facing design gallery */
+.customer-gallery-page{
+  display:none;
+  min-height:calc(100vh - 82px);
+  padding:22px 24px 32px;
+  direction:rtl;
+}
+body.customer-mode .layout{display:none!important}
+body.customer-mode #customerGalleryPage{display:block}
+body.customer-mode .top-actions,
+body.customer-mode #menuBtn{display:none!important}
+
+.customer-gallery-shell{
+  max-width:1560px;
+  margin:0 auto;
+}
+.customer-gallery-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  margin-bottom:18px;
+}
+.customer-gallery-title small{
+  display:block;
+  color:#62e99a;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:1.8px;
+  margin-bottom:4px;
+}
+.customer-gallery-title h1{
+  margin:0;
+  font-size:30px;
+  line-height:1.25;
+  color:#f5fff8;
+}
+.customer-gallery-title p{
+  margin:6px 0 0;
+  color:#93ac9c;
+  font-size:13px;
+}
+.customer-back-btn{
+  border:1px solid rgba(56,231,119,.42);
+  background:#06381f;
+  color:#effff4;
+  min-height:44px;
+  padding:0 18px;
+  border-radius:12px;
+  font:inherit;
+  font-weight:800;
+  cursor:pointer;
+}
+.customer-back-btn:hover{background:#084c2a}
+
+.customer-gallery-search{
+  height:58px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:0 15px;
+  margin-bottom:18px;
+  border:1px solid rgba(52,222,111,.28);
+  border-radius:15px;
+  background:rgba(3,31,18,.82);
+  box-shadow:0 10px 28px rgba(0,0,0,.16);
+}
+.customer-search-icon{
+  color:#65e99b;
+  font-size:24px;
+}
+.customer-gallery-search input{
+  flex:1;
+  min-width:0;
+  height:42px;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:#f4fff7;
+  font:inherit;
+  font-size:15px;
+}
+.customer-gallery-search input::placeholder{color:#668374}
+.customer-gallery-search b{
+  flex:0 0 auto;
+  min-width:78px;
+  text-align:center;
+  padding:8px 12px;
+  border-radius:999px;
+  background:#0a4629;
+  color:#cffff0;
+  font-size:12px;
+}
+
+.customer-design-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(205px,1fr));
+  gap:14px;
+  align-items:start;
+}
+.customer-design-card{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(72,192,112,.24);
+  border-radius:16px;
+  background:#042817;
+  cursor:pointer;
+  outline:none;
+  content-visibility:auto;
+  contain-intrinsic-size:265px 235px;
+}
+.customer-design-card:hover,
+.customer-design-card:focus-visible{
+  border-color:#43dc7b;
+  box-shadow:0 0 0 2px rgba(67,220,123,.11);
+}
+.customer-design-card.current{
+  border-color:#e59915;
+  box-shadow:0 0 0 2px rgba(229,153,21,.16);
+}
+.customer-design-image{
+  position:relative;
+  width:100%;
+  aspect-ratio:1 / 1;
+  background:#062016;
+  overflow:hidden;
+}
+.customer-design-image img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:contain;
+  background:#fff;
+}
+.customer-design-image .no-preview{
+  width:100%;
+  height:100%;
+  display:grid;
+  place-items:center;
+  color:#6f8c7c;
+  font-size:12px;
+  letter-spacing:.8px;
+}
+.customer-selected-badge{
+  position:absolute;
+  top:10px;
+  right:10px;
+  z-index:2;
+  display:none;
+  padding:6px 9px;
+  border-radius:999px;
+  background:#e59915;
+  color:#1b1407;
+  font-size:10px;
+  font-weight:900;
+}
+.customer-design-card.current .customer-selected-badge{display:block}
+
+.customer-design-meta{
+  min-height:76px;
+  padding:11px 12px 12px;
+}
+.customer-design-meta small{
+  display:block;
+  margin-bottom:4px;
+  color:#63d990;
+  direction:ltr;
+  text-align:right;
+  font-size:11px;
+}
+.customer-design-meta strong{
+  display:block;
+  overflow:hidden;
+  color:#f0fff5;
+  font-size:14px;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+.customer-design-meta span{
+  display:block;
+  margin-top:6px;
+  color:#708f7e;
+  font-size:10px;
+}
+
+.customer-gallery-empty{
+  padding:70px 20px;
+  text-align:center;
+  color:#7f9c8b;
+  font-size:15px;
+}
+.customer-gallery-sentinel{
+  height:2px;
+  width:100%;
+  margin-top:12px;
+}
+
+@media (max-width:760px){
+  .customer-gallery-page{padding:16px 12px 26px}
+  .customer-gallery-head{align-items:flex-start;flex-direction:column}
+  .customer-back-btn{width:100%}
+  .customer-design-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .customer-gallery-search b{display:none}
+}
