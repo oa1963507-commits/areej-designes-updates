@@ -6,6 +6,7 @@
   <title>Areej Designes</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="brand_patch.css" />
+  <link rel="stylesheet" href="customer_gallery.css" />
 </head>
 <body>
   <div class="ambient a1"></div><div class="ambient a2"></div><div class="grid-bg"></div>
@@ -73,7 +74,31 @@
       </section>
     </main>
 
-    <div id="drawer" class="drawer"><div class="drawer-head"><b>التنقل</b><button id="drawerClose">×</button></div><button data-page="library">▣ المكتبة</button><button data-page="activity">☷ سجل التغييرات</button><button data-page="stats">▥ إحصائيات الطباعة</button><button id="favoritesNav">★ المفضلة</button><button id="drawerSettings">⚙ الإعدادات</button></div>
+
+    <section id="customerGalleryPage" class="customer-gallery-page" hidden>
+      <div class="customer-gallery-shell">
+        <div class="customer-gallery-head">
+          <div class="customer-gallery-title">
+            <small>CLIENT DESIGN LIBRARY</small>
+            <h1>اختار التصميم المناسب</h1>
+            <p>اضغط على أي تصميم لاختياره للتنفيذ.</p>
+          </div>
+          <button id="customerBackBtn" class="customer-back-btn">← العودة للبرنامج</button>
+        </div>
+
+        <div class="customer-gallery-search">
+          <span class="customer-search-icon">⌕</span>
+          <input id="customerSearch" type="search" autocomplete="off" placeholder="ابحث باسم التصميم أو السيريال" />
+          <b id="customerGalleryCount">0 تصميم</b>
+        </div>
+
+        <div id="customerDesignGrid" class="customer-design-grid"></div>
+        <div id="customerGalleryEmpty" class="customer-gallery-empty" hidden>لا توجد تصميمات مطابقة</div>
+        <div id="customerGallerySentinel" class="customer-gallery-sentinel" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <div id="drawer" class="drawer"><div class="drawer-head"><b>التنقل</b><button id="drawerClose">×</button></div><button data-page="library">▣ المكتبة</button><button id="customerGalleryNav" data-page="customer">▦ معرض العملاء</button><button data-page="activity">☷ سجل التغييرات</button><button data-page="stats">▥ إحصائيات الطباعة</button><button id="favoritesNav">★ المفضلة</button><button id="drawerSettings">⚙ الإعدادات</button></div>
     <div id="backdrop" class="backdrop"></div>
 
     <div id="modal" class="modal"><div class="modal-card"><button id="modalClose" class="modal-close">×</button><div id="modalContent"></div></div></div>
@@ -82,5 +107,6 @@
   </div>
   <script src="app.js"></script>
   <script src="performance_patch.js"></script>
+  <script src="customer_gallery.js"></script>
 </body>
 </html>
