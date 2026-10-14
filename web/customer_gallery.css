@@ -268,3 +268,142 @@ body.customer-mode #menuBtn{display:none!important}
   white-space:nowrap;
   text-overflow:ellipsis;
 }
+
+
+/* V18.12 - image-first customer gallery */
+.customer-design-card{
+  background:#031d12 !important;
+  border-radius:18px !important;
+  overflow:hidden !important;
+}
+.customer-design-image{
+  aspect-ratio:auto !important;
+  min-height:220px !important;
+  background:#071b13 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+}
+.customer-design-image img{
+  width:100% !important;
+  height:auto !important;
+  max-height:420px !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  background:#fff !important;
+}
+.customer-design-meta,
+.customer-price-badge{
+  display:none !important;
+}
+
+.customer-hover-overlay{
+  position:absolute;
+  inset:0;
+  z-index:2;
+  display:flex;
+  align-items:flex-end;
+  padding:14px;
+  opacity:0;
+  pointer-events:none;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(2,11,7,0) 20%,
+      rgba(2,17,10,.18) 46%,
+      rgba(2,17,10,.88) 100%
+    );
+  transition:opacity 160ms ease;
+}
+.customer-hover-info{
+  width:100%;
+  transform:translateY(10px);
+  opacity:0;
+  transition:transform 160ms ease, opacity 160ms ease;
+}
+.customer-design-card:hover .customer-hover-overlay,
+.customer-design-card:focus-visible .customer-hover-overlay{
+  opacity:1;
+}
+.customer-design-card:hover .customer-hover-info,
+.customer-design-card:focus-visible .customer-hover-info{
+  transform:translateY(0);
+  opacity:1;
+}
+
+.customer-hover-serial{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:6px;
+}
+.customer-hover-serial span{
+  color:#a7b8ae;
+  font-size:10px;
+  font-weight:750;
+}
+.customer-hover-serial b{
+  color:#6ee49a;
+  direction:ltr;
+  font-size:12px;
+  font-weight:900;
+}
+
+.customer-hover-name{
+  display:block;
+  overflow:hidden;
+  margin-bottom:10px;
+  color:#ffffff;
+  font-size:16px;
+  font-weight:900;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  text-shadow:0 1px 10px rgba(0,0,0,.55);
+}
+
+.customer-hover-price{
+  display:inline-flex;
+  align-items:baseline;
+  gap:6px;
+  min-width:118px;
+  padding:8px 12px;
+  border:1px solid rgba(229,153,21,.78);
+  border-radius:12px;
+  background:rgba(38,24,2,.88);
+  box-shadow:0 8px 22px rgba(0,0,0,.28);
+  backdrop-filter:blur(6px);
+}
+.customer-hover-price span{
+  color:#f3c86d;
+  font-size:9px;
+  font-weight:800;
+}
+.customer-hover-price strong{
+  color:#ffd36c;
+  font-size:21px;
+  line-height:1;
+  font-weight:950;
+}
+.customer-hover-price em{
+  color:#e59915;
+  font-size:10px;
+  font-style:normal;
+  font-weight:900;
+}
+
+.customer-selected-badge{
+  top:10px !important;
+  right:10px !important;
+  z-index:4 !important;
+  background:#e59915 !important;
+  color:#1d1507 !important;
+  box-shadow:0 6px 18px rgba(0,0,0,.28);
+}
+
+/* Keep image fully visible on touch devices; details remain available on tap focus. */
+@media (hover:none){
+  .customer-hover-overlay{opacity:0}
+  .customer-design-card:focus .customer-hover-overlay{opacity:1}
+  .customer-design-card:focus .customer-hover-info{transform:translateY(0);opacity:1}
+}
