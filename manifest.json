@@ -1,29 +1,17 @@
 {
-  "version": "18.13",
+  "version": "18.14",
   "channel": "stable",
-  "notes": "تفعيل التحديث الفوري: تعديلات الواجهة تظهر مباشرة بعد التحديث بدون إعادة تشغيل البرنامج. تحديثات ملفات التشغيل الأساسية فقط تحتاج إعادة تشغيل.",
+  "notes": "معرض العملاء: الكارت بالكامل أصبح التصميم فقط، ولا تظهر السيريال والاسم والسعر إلا أثناء وجود مؤشر الماوس فوق التصميم. تم أيضًا كسر كاش ملفات المعرض لضمان ظهور الشكل الجديد فورًا.",
   "base_url": "https://raw.githubusercontent.com/oa1963507-commits/areej-designes-updates/main",
   "files": [
     {
-      "path": "ProductionLibrary.py"
-    },
-    {
       "path": "web/index.html"
-    },
-    {
-      "path": "web/brand_patch.css"
-    },
-    {
-      "path": "web/performance_patch.js"
     },
     {
       "path": "web/customer_gallery.css"
     },
     {
       "path": "web/customer_gallery.js"
-    },
-    {
-      "path": "web/hot_update_patch.js"
     }
   ]
 }
