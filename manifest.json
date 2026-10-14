@@ -1,17 +1,14 @@
 {
-  "version": "18.16",
+  "version": "18.17",
   "channel": "stable",
-  "notes": "إضافة انترو عند فتح البرنامج لمدة 5 ثوانٍ يعرض شعار Areej واسم Areej Designes. يظهر مرة واحدة مع كل تشغيل للبرنامج ولا يتكرر مع تحديثات الواجهة داخل نفس الجلسة.",
+  "notes": "إضافة موشن خفيف للوجو واسم Areej Designes أعلى الشمال: دخول ناعم، حركة بسيطة للوجو، ولمعة خفيفة على Designes بدون تأثير ملحوظ على الأداء.",
   "base_url": "https://raw.githubusercontent.com/oa1963507-commits/areej-designes-updates/main",
   "files": [
     {
       "path": "web/index.html"
     },
     {
-      "path": "web/startup_intro.css"
-    },
-    {
-      "path": "web/startup_intro.js"
+      "path": "web/brand_patch.css"
     }
   ]
 }
