@@ -1,35 +1,11 @@
 {
-  "version": "18.23",
+  "version": "18.24",
   "channel": "stable",
-  "notes": "إصلاح نهائي لقناة التحديث للأجهزة المتوقفة عند V18.20، مع مزامنة محرك التحديث وكل تعديلات الواجهة الأخيرة.",
+  "notes": "إصلاح قاعدة البيانات تلقائيًا: عند فتح أي مكتبة قديمة، البرنامج يتأكد من وجود جدول activity_log ويقوم بإنشائه تلقائيًا إذا كان مفقودًا بدون حذف أو تعديل بيانات التصميمات.",
   "base_url": "https://raw.githubusercontent.com/oa1963507-commits/areej-designes-updates/main",
   "files": [
     {
       "path": "ProductionLibrary.py"
-    },
-    {
-      "path": "web/index.html"
-    },
-    {
-      "path": "web/brand_patch.css"
-    },
-    {
-      "path": "web/performance_patch.js"
-    },
-    {
-      "path": "web/customer_gallery.css"
-    },
-    {
-      "path": "web/customer_gallery.js"
-    },
-    {
-      "path": "web/hot_update_patch.js"
-    },
-    {
-      "path": "web/startup_intro.css"
-    },
-    {
-      "path": "web/startup_intro.js"
     }
   ]
 }
